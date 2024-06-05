@@ -12,10 +12,14 @@ export const QuadrantChart = ({
   invertY,
   legendTitle,
   yLabelTop,
-yLabelBottom,
-xLabelLeft,
-xLabelRight,
+  yLabelBottom,
+  xLabelLeft,
+  xLabelRight,
+  regression = {m: 1, b:10}
 }) => {
+
+  const { m, b} = regression;
+  
   const svgRef = useRef(null);
 
   const uniqueMap = data.reduce((acc, curr) => {
@@ -113,42 +117,42 @@ xLabelRight,
     // legend
     // include the categories in the bottom right corner of the viz
     const legendGroup = group
-  .append('g')
-  .attr('class', 'legend')
-  .attr('transform', `translate(${width + margin.right / 2}, ${margin.top})`);
+      .append('g')
+      .attr('class', 'legend')
+      .attr('transform', `translate(${width + margin.right / 2}, ${margin.top})`);
 
-  legendGroup
-  .append('text')
-  .attr('x', 0)
-  .attr('y', -10) // Ajusta la posición vertical según sea necesario
-  .style('font-size', '0.8rem') // Ajusta el tamaño del texto según sea necesario
-  .style('font-weight', 'bold') // Opcional: Ajusta el peso del texto según sea necesario
-  .text(legendTitle);
+    legendGroup
+      .append('text')
+      .attr('x', 0)
+      .attr('y', -10) // Ajusta la posición vertical según sea necesario
+      .style('font-size', '0.8rem') // Ajusta el tamaño del texto según sea necesario
+      .style('font-weight', 'bold') // Opcional: Ajusta el peso del texto según sea necesario
+      .text(legendTitle);
 
-// Agregar las leyendas
-const legendItems = legendGroup
-  .selectAll('g.legend-item')
-  .data(legend)
-  .enter()
-  .append('g')
-  .attr('class', 'legend-item')
-  .attr('transform', (d, i) => `translate(0 ${i * 15})`);
+    // Agregar las leyendas
+    const legendItems = legendGroup
+      .selectAll('g.legend-item')
+      .data(legend)
+      .enter()
+      .append('g')
+      .attr('class', 'legend-item')
+      .attr('transform', (d, i) => `translate(0 ${i * 15})`);
 
-legendItems
-  .append('circle')
-  .attr('cx', 0)
-  .attr('cy', 0)
-  .attr('r', 4)
-  .attr('fill', ({ color }) => color);
+    legendItems
+      .append('circle')
+      .attr('cx', 0)
+      .attr('cy', 0)
+      .attr('r', 4)
+      .attr('fill', ({ color }) => color);
 
-legendItems
-  .append('text')
-  .attr('x', 12)
-  .attr('y', 0)
-  .attr('dominant-baseline', 'middle')
-  .text((d) => d.name)
-  .style('font-size', '0.5rem')
-  .style('letter-spacing', '0.05rem');
+    legendItems
+      .append('text')
+      .attr('x', 12)
+      .attr('y', 0)
+      .attr('dominant-baseline', 'middle')
+      .text((d) => d.name)
+      .style('font-size', '0.5rem')
+      .style('letter-spacing', '0.05rem');
 
     // axes
     const xAxis = d3.axisBottom(xScale).tickFormat((d) => d);
@@ -224,42 +228,42 @@ legendItems
       .attr('transform', 'rotate(-90)');
 
     // Agregar etiquetas adicionales en el eje X
-group
-.append('text')
-.attr('class', 'axis-label')
-.attr('x', 0)
-.attr('y', height + margin.bottom / 1.5 ) // Ajusta la posición vertical según sea necesario
-.attr('text-anchor', 'start') // Alinea el texto a la izquierda
-.text(xLabelLeft);
+    group
+      .append('text')
+      .attr('class', 'axis-label')
+      .attr('x', 0)
+      .attr('y', height + margin.bottom / 1.5) // Ajusta la posición vertical según sea necesario
+      .attr('text-anchor', 'start') // Alinea el texto a la izquierda
+      .text(xLabelLeft);
 
-group
-.append('text')
-.attr('class', 'axis-label')
-.attr('x', width)
-.attr('y', height + margin.bottom / 1.5) // Ajusta la posición vertical según sea necesario
-.attr('text-anchor', 'end') // Alinea el texto a la derecha
-.text(xLabelRight);
+    group
+      .append('text')
+      .attr('class', 'axis-label')
+      .attr('x', width)
+      .attr('y', height + margin.bottom / 1.5) // Ajusta la posición vertical según sea necesario
+      .attr('text-anchor', 'end') // Alinea el texto a la derecha
+      .text(xLabelRight);
 
-// Agregar etiquetas adicionales en el eje Y
-group
-.append('text')
-.attr('class', 'axis-label')
-.attr('x', 0)
-.attr('y', -20)
-.attr('dy', -5) // Ajusta la posición vertical según sea necesario
-.attr('text-anchor', 'end') // Alinea el texto a la derecha
-.text(yLabelTop)
-.attr('transform', `rotate(-90)`); // Rota el texto para que esté vertical
+    // Agregar etiquetas adicionales en el eje Y
+    group
+      .append('text')
+      .attr('class', 'axis-label')
+      .attr('x', 0)
+      .attr('y', -20)
+      .attr('dy', -5) // Ajusta la posición vertical según sea necesario
+      .attr('text-anchor', 'end') // Alinea el texto a la derecha
+      .text(yLabelTop)
+      .attr('transform', `rotate(-90)`); // Rota el texto para que esté vertical
 
-group
-.append('text')
-.attr('class', 'axis-label')
-.attr('x', - height)
-.attr('y', -20)
-.attr('dy', -5) // Ajusta la posición vertical según sea necesario
-.attr('text-anchor', 'start') // Alinea el texto a la izquierda
-.text(yLabelBottom)
-.attr('transform', `rotate(-90)`); // Rota el texto para que esté vertical
+    group
+      .append('text')
+      .attr('class', 'axis-label')
+      .attr('x', -height)
+      .attr('y', -20)
+      .attr('dy', -5) // Ajusta la posición vertical según sea necesario
+      .attr('text-anchor', 'start') // Alinea el texto a la izquierda
+      .text(yLabelBottom)
+      .attr('transform', `rotate(-90)`); // Rota el texto para que esté vertical
 
     // style both labels with a heavier weight
     d3.selectAll('g.label text')
@@ -329,6 +333,23 @@ group
       .style('font-size', '0.55rem')
       .style('letter-spacing', '0.05rem')
       .style('pointer-events', 'none');
+
+    // Calculate the points for the line y = mx + b
+
+    const x1 = xScale.domain()[0];
+    const x2 = xScale.domain()[1];
+    const y1 = ((m * x1 + b) * 100) / xScale.domain()[1];
+    const y2 = ((m * x2 + b) * 100) / xScale.domain()[1];
+
+    // Append the line to the group
+    group
+      .append('line')
+      .attr('x1', xScale(x1))
+      .attr('y1', yScale(y1))
+      .attr('x2', xScale(x2))
+      .attr('y2', yScale(y2))
+      .attr('stroke', 'gray')
+      .attr('stroke-width', 1);
 
     // on hover highlight the data point
     dataPointsGroup
